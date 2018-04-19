@@ -8,6 +8,13 @@ namespace GameArcade.Subclasses
 {
     public class C_Film : C_Subclasses, ISelectHandler
     {
+        public enum CATEGORIA
+        {
+            COMEDIA,
+            TERROR,
+            DOCUMENTAL
+        }
+
         [HideInInspector]
         public string nombre;
         [HideInInspector]
@@ -18,7 +25,9 @@ namespace GameArcade.Subclasses
         public bool isYoutubeVideo = false;
         [HideInInspector]
         public string director = "";
-                
+        [HideInInspector]
+        public CATEGORIA categoria;
+
         public void Init(string _name,  string _filePath,  bool _isYoutubeVideo = false)
         {
             nombre = _name;
@@ -36,7 +45,9 @@ namespace GameArcade.Subclasses
             if (lines != null)
             {
                 if (lines.Length >= 1)
-                    director = lines[0];
+                    categoria = (CATEGORIA)int.Parse(lines[0]);
+                if (lines.Length >= 2)
+                    director = lines[1];
                 videoInfo = "<b>" + director + "</b>\n";
                 for (int i = 1; i < lines.Length; i++)
                 {
@@ -48,12 +59,14 @@ namespace GameArcade.Subclasses
                 Debug.Log("Lines was null");
         }
 
-        public void Init(Sprite _icon, string _name, string _filmPath)
+        public virtual void Init(Sprite _icon, string _name, string _filmPath, string _videoInfo, CATEGORIA _cat)
         {
             nombre = _name;
             filmPath = _filmPath;
             txtNombre.text = nombre;
             icono.sprite = _icon;
+            videoInfo = _videoInfo;
+            categoria = _cat;
         }
 
         private MenuManager menuManager;

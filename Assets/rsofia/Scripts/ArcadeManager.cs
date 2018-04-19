@@ -44,6 +44,9 @@ namespace GameArcade
         public void LoadAllGames()
         {
             Debug.Log("Here I Am");
+            //Esto de aqui ya lo habia hecho en una clase llamada FileReader. La funcion es
+            // ReadAllFoldersAtPath y recibe como argumento el path y regresa una lista de
+            // todos los folders dentro - Sofia
             Debug.Log(SCR_FileManager.persistentDataPath + "/Games/");
             if(Directory.Exists(SCR_FileManager.persistentDataPath + "/Games/"))
             {
@@ -92,7 +95,7 @@ namespace GameArcade
         {
             folders = FileReader.ReadAllFoldersAtPath(filmPath);
 
-            //Delete any that might exist
+            //Delete any buttons that might exist
             for (int i = parentMenuFilm.childCount -1; i >= 0; i--)
             {
                 Destroy(parentMenuFilm.GetChild(i).gameObject);
