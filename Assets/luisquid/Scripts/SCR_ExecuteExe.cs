@@ -18,7 +18,7 @@ public class SCR_ExecuteExe : MonoBehaviour {
         }
 	}
 
-    public void RunGame(string _direction)
+    public static void RunGame(string _direction)
     {
         Process.Start(_direction);
     }

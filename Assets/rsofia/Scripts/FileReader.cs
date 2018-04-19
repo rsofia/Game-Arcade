@@ -8,7 +8,8 @@ namespace GameArcade
 {
     public class FileReader : ParentOfAll
     {
-        public List<string> ReadAllFilesAtPath(string _path)
+        //Returns a list of all the files found at a certain path
+        public static List<string> ReadAllFilesAtPath(string _path)
         {
             DirectoryInfo directory = new DirectoryInfo(_path);
             FileInfo[] files = directory.GetFiles();
@@ -23,21 +24,80 @@ namespace GameArcade
             return listFiles;
         }
 
-        public List<string> ReadAllFoldersAtPath(string _path)
+        //Returns an array of all the .exes inside a folder
+        public static string[] GetExeInsideFolder(string _path)
+        {
+
+            return Directory.GetFiles(_path, "*.exe");
+        }
+
+        //Returns JPGs inside folder or if none found, PNGs
+        public static Texture2D GetImageInsideFolder(string _path)
+        {
+            Texture2D img = new Texture2D(2, 2);
+            string[] result = System.IO.Directory.GetFiles(_path, "*.jpg");
+            if(result.Length == 0)
+            {
+                result = System.IO.Directory.GetFiles(_path, "*.png");
+            }
+
+            if(result.Length >= 1)
+            {
+                if (File.Exists(result[0]))
+                {
+                    byte[] fileData = File.ReadAllBytes(result[0]);
+                    img.LoadImage(fileData);
+                }
+            }
+            return img;
+        }
+
+        //Returns path of of the first video mp4 or wav found
+        public static string GetVideoPathFrom(string _path)
+        {
+            string[] result = System.IO.Directory.GetFiles(_path, "*.mp4");
+            if (result.Length == 0)
+            {
+                result = System.IO.Directory.GetFiles(_path, "*.wav");
+            }
+
+            if (result.Length >= 1)
+            {
+                return result[0];
+            }
+            return null;
+        }
+
+        //Returns a list of all folders at a certain path
+        public static List<string> ReadAllFoldersAtPath(string _path)
         {
             DirectoryInfo directory = new DirectoryInfo(_path);
             DirectoryInfo[] subfolders = directory.GetDirectories();
             List<string> folders = new List<string>();
             foreach (DirectoryInfo info in subfolders)
             {
-                UnityEngine.Debug.Log("Folder: " + info.Name);
+                //UnityEngine.Debug.Log("Folder: " + info.Name);
                 folders.Add(info.Name);
             }
 
             return folders;
         }
 
-        public static int ExecuteCommand(string _command, int _timeout)
+        //Returns all the content from a txt file from a path
+        public static string[] ReadAllLinesFromTxtAtPath(string _path)
+        {
+            string[] files = System.IO.Directory.GetFiles(_path, "*.txt");
+            //UnityEngine.Debug.Log("files length: " + files.Length + " path" + _path);
+            if (files.Length >= 1)
+            {
+                return File.ReadAllLines(files[0]);
+            }
+            else
+                return null;
+        }
+
+        //Executes a command from the comand window
+        public static int ExecuteCommand(string _command, int _timeout = 1500)
         {
             int exitCode = 0;
             var processInfo = new ProcessStartInfo("cmd.exe", "/C " + _command)

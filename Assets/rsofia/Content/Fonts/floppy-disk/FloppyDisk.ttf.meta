@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: e0a77fd4580f0fe43b0b2ba255a10dc8
+timeCreated: 1523315802
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Floppy Disk
+  fontNames:
+  - Floppy Disk
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: ab723b23040a94347a7e774b0f6805e3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
