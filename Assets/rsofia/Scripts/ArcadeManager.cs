@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 using GameArcade.Subclasses;
 
 namespace GameArcade
@@ -14,19 +15,27 @@ namespace GameArcade
         public static string gameExesPath = "D:/rsofia/Documents/3DMX/VIII/Proyecto de Titulacion II/Game Arcade/Arcade/Games/";
         public GameObject gameBtnPrefab;
         public Transform parentMenuGame;
+
         [Header("Menu Films")]
         public static string filmPath = "D:/rsofia/Documents/3DMX/VIII/Proyecto de Titulacion II/Game Arcade/Arcade/Film/";
         public GameObject filmBtnPrefab;
         public Transform parentMenuFilm;
         public C_VideoInfo videoInfo;
+
         [Header("Video Player")]
         public VideoManager videoManager;
+
         private List<string> folders = new List<string>();
         private Dictionary<int, C_Game> allGames = new Dictionary<int, C_Game>();
         private Dictionary<int, C_Game> allFilms = new Dictionary<int, C_Game>();
 
+
+        private SCR_FileManager scrFileManager;
+
         void Start()
-        {   
+        {
+            scrFileManager = FindObjectOfType<SCR_FileManager>();
+
             //Check for games and videos only at start of app
             LoadAllGames();
             LoadAllVideos();
@@ -34,31 +43,49 @@ namespace GameArcade
 
         public void LoadAllGames()
         {
-            folders = FileReader.ReadAllFoldersAtPath(gameExesPath);
-
-            //Delete any that might exist
-            for(int i = parentMenuGame.childCount-1; i >= 0; i--)
+            Debug.Log("Here I Am");
+            Debug.Log(SCR_FileManager.persistentDataPath + "/Games/");
+            if(Directory.Exists(SCR_FileManager.persistentDataPath + "/Games/"))
             {
-                Destroy(parentMenuGame.GetChild(i).gameObject);
-            }
+                string [] tempDirectories = scrFileManager.GetAllFoldersFromPath(SCR_FileManager.persistentDataPath + "/Games/");
 
-            foreach (string folderName in folders)
-            {
-                string[] exeName = FileReader.GetExeInsideFolder(gameExesPath + folderName);
-                if (exeName.Length == 1)
+                for(int i = 0; i < tempDirectories.Length; i++)
                 {
-                    GameObject btn = Instantiate(gameBtnPrefab, parentMenuGame);
-                    Texture2D img = FileReader.GetImageInsideFolder(gameExesPath + folderName);
-                    btn.GetComponent<C_Game>().Init(folderName, img, exeName[0]);
-                    btn.GetComponent<Button>().onClick.AddListener(() => OpenGame(exeName[0]));
-                }
-                else
-                {
-                    //No button will be created if the file has errors
-                    Debug.Log("You either have no exes or too many exes inside folder at path " + folderName);
+                    Debug.Log(tempDirectories[i]);
                 }
             }
-            folders.Clear();
+
+            else
+            {
+                Debug.Log("I do not exist");
+                Directory.CreateDirectory(SCR_FileManager.persistentDataPath + "/Games/");
+            }
+
+            //folders = FileReader.ReadAllFoldersAtPath(gameExesPath);
+
+            ////Delete any that might exist
+            //for(int i = parentMenuGame.childCount-1; i >= 0; i--)
+            //{
+            //    Destroy(parentMenuGame.GetChild(i).gameObject);
+            //}
+
+            //foreach (string folderName in folders)
+            //{
+            //    string[] exeName = FileReader.GetExeInsideFolder(gameExesPath + folderName);
+            //    if (exeName.Length == 1)
+            //    {
+            //        GameObject btn = Instantiate(gameBtnPrefab, parentMenuGame);
+            //        Texture2D img = FileReader.GetImageInsideFolder(gameExesPath + folderName);
+            //        btn.GetComponent<C_Game>().Init(folderName, img, exeName[0]);
+            //        btn.GetComponent<Button>().onClick.AddListener(() => OpenGame(exeName[0]));
+            //    }
+            //    else
+            //    {
+            //        //No button will be created if the file has errors
+            //        Debug.Log("You either have no exes or too many exes inside folder at path " + folderName);
+            //    }
+            //}
+            //folders.Clear();
         }
 
         public void LoadAllVideos()
