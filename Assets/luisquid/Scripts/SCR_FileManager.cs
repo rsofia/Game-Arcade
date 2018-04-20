@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 using UnityEngine.UI;
 using SFB;
 
@@ -35,7 +37,7 @@ public class SCR_FileManager : MonoBehaviour {
                 new ExtensionFilter("Executable File", "exe"),
             };
 
-        pathExe = GameObject.Find("TXT_Exe").GetComponent<Text>().text = StandaloneFileBrowser.OpenFilePanel("Upload Exe", "", extensions, false)[0];
+        pathExe = GameObject.Find("TXTMSH_Exe").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Exe", "", extensions, false)[0];
 
         //File.Copy(StandaloneFileBrowser.OpenFilePanel("Upload Exe", "", extensions, false)[0], persistentDataPath + "/Games/Prueba.exe");
     }
@@ -50,11 +52,25 @@ public class SCR_FileManager : MonoBehaviour {
     public void OnUploadImageClicked()
     {
         var extensions = new[] { new ExtensionFilter("Image File", "img", "png") };
-        pathImg = StandaloneFileBrowser.OpenFilePanel("Upload Game Thumbnail", "", extensions, false)[0];
+        pathImg = StandaloneFileBrowser.OpenFilePanel("Upload Game Thumbnail", "", "", false)[0];
         Debug.Log(pathImg);
     }
 
-	void Start () 
+    public void OnUploadFilesClicked()
+    {
+        File.Copy(pathExe, persistentDataPath + "/Games/Prueba.exe");
+
+        foreach (string dirPath in Directory.GetDirectories(pathDataFolder, "*",
+                    SearchOption.AllDirectories))
+            Directory.CreateDirectory(dirPath.Replace(pathDataFolder, persistentDataPath + "/Games/"));
+
+        //Copy all the files & Replaces any files with the same name
+        foreach (string newPath in Directory.GetFiles(pathDataFolder, "*.*",
+            SearchOption.AllDirectories))
+            File.Copy(newPath, newPath.Replace(pathDataFolder, persistentDataPath + "/Games/"), true);
+    }
+
+    void Start () 
 	{
         persistentDataPath = Application.persistentDataPath;
         Debug.Log(persistentDataPath);
