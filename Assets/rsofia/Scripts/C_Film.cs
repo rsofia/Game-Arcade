@@ -44,9 +44,8 @@ namespace GameArcade.Subclasses
             string[] lines = FileReader.ReadAllLinesFromTxtAtPath(filmPath);
             if (lines != null)
             {
+                Debug.Log("Linea 0: " + lines[0]);
                 if (lines.Length >= 1)
-                    categoria = (CATEGORIA)int.Parse(lines[0]);
-                if (lines.Length >= 2)
                     director = lines[1];
                 videoInfo = "<b>" + director + "</b>\n";
                 for (int i = 1; i < lines.Length; i++)
@@ -76,7 +75,7 @@ namespace GameArcade.Subclasses
             if (menuManager == null)
                 menuManager = FindObjectOfType<MenuManager>();
             menuManager.FillInfoWith(GetComponent<C_Film>());
-            Debug.Log(gameObject.name + " was selected");
+           // Debug.Log(gameObject.name + " was selected");
         }
 
     }
