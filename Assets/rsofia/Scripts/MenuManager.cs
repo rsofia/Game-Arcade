@@ -89,7 +89,7 @@ namespace GameArcade
 
         public void FillInfoWith(Subclasses.C_Film _film)
         {
-            videoPreview.Init(_film.icono.sprite, _film.nombre, _film.filmPath, _film.videoInfo, _film.categoria);
+            videoPreview.Init(_film.icono.sprite, _film.nombre, _film.filmPath, _film.videoInfo);
         }
 
     }

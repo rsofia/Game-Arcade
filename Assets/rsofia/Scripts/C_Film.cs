@@ -8,13 +8,6 @@ namespace GameArcade.Subclasses
 {
     public class C_Film : C_Subclasses, ISelectHandler
     {
-        public enum CATEGORIA
-        {
-            COMEDIA,
-            TERROR,
-            DOCUMENTAL
-        }
-
         [HideInInspector]
         public string nombre;
         [HideInInspector]
@@ -26,7 +19,7 @@ namespace GameArcade.Subclasses
         [HideInInspector]
         public string director = "";
         [HideInInspector]
-        public CATEGORIA categoria;
+        public int[] generos;
 
         public void Init(string _name,  string _filePath,  bool _isYoutubeVideo = false)
         {
@@ -58,14 +51,13 @@ namespace GameArcade.Subclasses
                 Debug.Log("Lines was null");
         }
 
-        public virtual void Init(Sprite _icon, string _name, string _filmPath, string _videoInfo, CATEGORIA _cat)
+        public virtual void Init(Sprite _icon, string _name, string _filmPath, string _videoInfo)
         {
             nombre = _name;
             filmPath = _filmPath;
             txtNombre.text = nombre;
             icono.sprite = _icon;
             videoInfo = _videoInfo;
-            categoria = _cat;
         }
 
         private MenuManager menuManager;
