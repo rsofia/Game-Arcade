@@ -20,12 +20,13 @@ namespace GameArcade.Subclasses
         public string director = "";
         [HideInInspector]
         public int[] generos;
+        [HideInInspector]
+        public int categoria;
 
         public void Init(string _name,  string _filePath,  bool _isYoutubeVideo = false)
         {
             nombre = _name;
             filmPath = _filePath + nombre;
-            txtNombre.text = nombre;
             isYoutubeVideo = _isYoutubeVideo;
 
             //Leer png de un archivo png o jpg dentro de una carpeta
@@ -35,20 +36,21 @@ namespace GameArcade.Subclasses
 
             //Leer informacion de un archivo de texto
             string[] lines = FileReader.ReadAllLinesFromTxtAtPath(filmPath);
-            if (lines != null)
+            if (lines != null && lines.Length > 0)
             {
-                Debug.Log("Linea 0: " + lines[0]);
-                if (lines.Length >= 1)
-                    director = lines[1];
-                videoInfo = "<b>" + director + "</b>\n";
-                for (int i = 1; i < lines.Length; i++)
-                {
-                    videoInfo += lines[i] + "\n";
-                }
+                JSONVideoDetails videoDetails = JsonUtility.FromJson<JSONVideoDetails>(lines[0]);
+                director = videoDetails.director;
+                nombre = videoDetails.title;
+                generos = videoDetails.genres;
+                categoria = videoDetails.category;
+                videoInfo = "<b>Director: " + director + "</b>\n" + videoDetails.sinopsis;
 
             }
             else
                 Debug.Log("Lines was null");
+
+
+            txtNombre.text = nombre;
         }
 
         public virtual void Init(Sprite _icon, string _name, string _filmPath, string _videoInfo)

@@ -112,12 +112,58 @@ public class SCR_FileManager : MonoBehaviour {
         Debug.Log(pathVideoInfo);
     }
 
+    private void MakeVideoInfo(string path)
+    {
+        JSONVideoDetails videoDetails = new JSONVideoDetails()
+        {
+            //find input field with movie title
+            director = GameObject.Find("INPTFLD_Director").GetComponent<InputField>().text,
+            //find input field with directors name
+            title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text,
+            sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text,
+            category = GameObject.Find("DD_Categoria").GetComponent<Dropdown>().value
+        };
+
+        //get selected toggles
+        int counter = 0;
+        C_FilmGenre[] genres = FindObjectsOfType<C_FilmGenre>();
+        foreach (C_FilmGenre genre in genres)
+        {
+            if(genre.GetComponent<Toggle>().isOn)
+            {
+                counter++;
+            }
+        }
+
+        //Establich size of array
+        videoDetails.genres = new int[counter];
+
+        foreach (C_FilmGenre genre in genres)
+        {
+            if(genre.GetComponent<Toggle>().isOn)
+            {
+                if (counter - 1 >= 0)
+                    videoDetails.genres[counter - 1] = (int)genre.genre;
+                else
+                    break;
+                counter--;
+            }
+        }
+
+        TextWriter textWriter = new StreamWriter(path, false);
+        textWriter.WriteLine(JsonUtility.ToJson(videoDetails));
+        textWriter.Close();
+
+    }
+
     public void OnUploadVideoFilesClicked()
     {
         Directory.CreateDirectory(persistentDataPath + "/Video/" + uploadName);
         File.Copy(pathVideo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathVideo));
-        File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
+        MakeVideoInfo(persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
+        //File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
         File.Copy(pathImg, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathImg));
+
     }
     /*************************************************************************/
 

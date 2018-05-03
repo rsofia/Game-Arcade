@@ -7,17 +7,39 @@ using GameArcade.Subclasses;
 
 namespace GameArcade
 {
+    public enum FilmGenre
+    {
+        ACCION,
+        AVENTURA,
+        COMEDIA,
+        CIENCIA_FICCION,
+        DOCUMENTAL,
+        DRAMA,
+        MUSICAL,
+        HISTORIA,
+        TERROR,
+        OTRO
+    }
+
+    public enum VideoCategories
+    {
+        CORTOMETRAJE,
+        TRAILER,
+        DEMO_REEL,
+        BEHIND_THE_SCENES
+    }
+
     public class ArcadeManager : ParentOfAll
     {
         public MenuManager menuManager;
 
         [Header("Menu Games")]
-        public static string gameExesPath = "D:/rsofia/Documents/3DMX/VIII/Proyecto de Titulacion II/Game Arcade/Arcade/Games/";
+        public static string gameExesPath;
         public GameObject gameBtnPrefab;
         public Transform parentMenuGame;
 
         [Header("Menu Films")]
-        public static string filmPath = "D:/rsofia/Documents/3DMX/VIII/Proyecto de Titulacion II/Game Arcade/Arcade/Film/";
+        public static string filmPath;
         public GameObject filmBtnPrefab;
         public Transform parentMenuFilm;
         public C_VideoInfo videoInfo;
@@ -32,15 +54,23 @@ namespace GameArcade
 
         private SCR_FileManager scrFileManager;
 
+        public string[] generoFilm = { "Acción", "Aventura ", "Comedia", "Terror" };
+            
+
         void Start()
         {
             scrFileManager = FindObjectOfType<SCR_FileManager>();
+            if (string.IsNullOrEmpty(SCR_FileManager.persistentDataPath))
+                SCR_FileManager.persistentDataPath = Application.persistentDataPath;
+            gameExesPath = SCR_FileManager.persistentDataPath + "/Games/";
+            filmPath = SCR_FileManager.persistentDataPath + "/Video/";
 
             //Check for games and videos only at start of app
             LoadAllGames();
             LoadAllVideos();
         }
 
+#region LOAD
         public void LoadAllGames()
         {
             Debug.Log("Here I Am");
@@ -114,6 +144,7 @@ namespace GameArcade
 
             folders.Clear();
         }
+#endregion
 
         //This will be called when the button of the game is pressed
         public void OpenGame(string _gamePath)

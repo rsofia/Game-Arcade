@@ -243,11 +243,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -304,6 +304,11 @@ MonoBehaviour:
   parentMenuFilm: {fileID: 601907074}
   videoInfo: {fileID: 733546525}
   videoManager: {fileID: 625833058}
+  generoFilm:
+  - "Acci\xF3n"
+  - 'Aventura '
+  - Comedia
+  - Terror
 --- !u!4 &27021469
 Transform:
   m_ObjectHideFlags: 0
@@ -331,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f0639dfcdec924ca18a1085955be77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GO_AddGame: {fileID: 0}
 --- !u!1 &31927467
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,7 +614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &84798683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3037,7 +3043,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &733546522
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3109,7 +3115,7 @@ MonoBehaviour:
   videoInfo: 
   isYoutubeVideo: 0
   director: 
-  categoria: 0
+  generos: 
   txtInfo: {fileID: 13394380}
   btnPlay: {fileID: 759282770}
 --- !u!224 &759282769 stripped
@@ -3832,8 +3838,8 @@ RectTransform:
   m_Father: {fileID: 1505263406}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.000000044703484, y: 0}
+  m_AnchorMax: {x: 0.9999999, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3959,7 +3965,7 @@ MonoBehaviour:
   videoInfo: 
   isYoutubeVideo: 0
   director: 
-  categoria: 0
+  generos: 
   btnPlayVideo: {fileID: 1494298152}
 --- !u!1 &1049734511
 GameObject:
@@ -4451,6 +4457,46 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224000591238091986, guid: ab3c6c2b02695d74a9602b8603678b4a,
     type: 2}
   m_PrefabInternal: {fileID: 486166497}
+--- !u!1 &1259937403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1259937405}
+  - component: {fileID: 1259937404}
+  m_Layer: 0
+  m_Name: Scene Transitions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1259937404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1259937403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f1edf0614119042897515c563287e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1259937405
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1259937403}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1260561985
 GameObject:
   m_ObjectHideFlags: 0
@@ -5475,8 +5521,8 @@ RectTransform:
   m_Father: {fileID: 427306991}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.057347357}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
