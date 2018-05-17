@@ -31,6 +31,16 @@ namespace GameArcade
             return Directory.GetFiles(_path, "*.exe");
         }
 
+        public static void WriteTextAtPath(string _path, string _filaName, string _text, bool _append)
+        {
+            if(!Directory.Exists(_path))
+                Directory.CreateDirectory(_path);
+
+           TextWriter textWriter = new StreamWriter(_path + _filaName, _append);
+            textWriter.Write(_text);
+            textWriter.Close();
+        }
+
         //Returns JPGs inside folder or if none found, PNGs
         public static Texture2D GetImageInsideFolder(string _path)
         {

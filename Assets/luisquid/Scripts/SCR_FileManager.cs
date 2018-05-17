@@ -149,8 +149,9 @@ public class SCR_FileManager : MonoBehaviour {
                 counter--;
             }
         }
+        
+        //Aqui en un futuro encriptar
 
-        Sha
         TextWriter textWriter = new StreamWriter(path, false);
         textWriter.WriteLine(JsonUtility.ToJson(videoDetails));
         textWriter.Close();
