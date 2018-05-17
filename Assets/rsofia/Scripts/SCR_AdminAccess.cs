@@ -23,6 +23,7 @@ public class SCR_AdminAccess : MonoBehaviour {
     public InputField newUser_User;
     public InputField newUser_Password;
     public InputField newUser_ConfirmPassword;
+    public GameObject popupSuccess;
 
     private string mySalt = "LBBB21~13RSBM"; // NEVER CHANGE THIS. THIS WILL HELP MAKE THE HASH OF THE PASSWORDS
     private string userPath = "";
@@ -32,19 +33,13 @@ public class SCR_AdminAccess : MonoBehaviour {
     public InputField login_User;
     public InputField login_Password;
 
+    [Header("MenuOptions")]
+    public Text txtBienvenido;
 
     void Start()
     {
         userPath = Application.persistentDataPath + "/Datos/";
         ShowLogin();
-    }
-
-	public void ShowLogin()
-    {
-        activeUser = "";
-        loginPanel.SetActive(true);
-        txtErrorNewUser.text = "";
-        txtErrorLogin.text = "";
     }
 
     public void Login()
@@ -56,27 +51,35 @@ public class SCR_AdminAccess : MonoBehaviour {
             {
                 string[] lineas = File.ReadAllLines(userPath + userFileName);
                 JSONUser user;
+                bool isUserCorrect = false;
                 foreach (string linea in lineas)
                 {
                     user = JsonUtility.FromJson<JSONUser>(linea);
-                    if (user.username == newUser_User.text)
+                    if (user != null && user.username == login_User.text)
                     {
-                        if(login_Password.text == PasswordHashed(newUser_Password.text))
+                        isUserCorrect = true;
+                        if (user.password == PasswordHashed(login_Password.text))
                         {
                             //Login Successfull
-                            OpenOptionsMenu();
                             activeUser = user.username;
+                            txtErrorLogin.text = "Usuario creado exitosamente";
+                            OpenOptionsMenu();
+                            break;
                         }
                         else
                             txtErrorLogin.text = "Contraseña incorrecta";
                     }
-                    else
-                        txtErrorLogin.text = "Usuario incorrecto.";
+                }
+
+                if (!isUserCorrect)
+                {
+                    txtErrorLogin.text = "Usuario incorrecto.";
                 }
             }
         }
         else
             txtErrorLogin.text = "Por favor llena todos los campos";
+
     }
 
     public void CreateNewUser()
@@ -96,10 +99,12 @@ public class SCR_AdminAccess : MonoBehaviour {
                     JSONUser user;
                     foreach (string linea in lineas)
                     {
+                        Debug.Log("linea: " + linea);
                         user = JsonUtility.FromJson<JSONUser>(linea);
-                        if (user.username == newUser_User.text)
+                        if (user != null && user.username == newUser_User.text)
                         {
                             doesUserExist = true;
+                            newUserID = user.id + 1;
                         }
                     }
                 }
@@ -107,12 +112,15 @@ public class SCR_AdminAccess : MonoBehaviour {
 
                 if (!doesUserExist)
                 {
+                    DateTime localDate = DateTime.Now;
                     JSONUser user = new JSONUser
                     {
                         id = newUserID,
                         username = newUser_User.text,
-                        password = PasswordHashed(newUser_Password.text)
-                    };
+                        password = PasswordHashed(newUser_Password.text),
+                        createdBy = activeUser,
+                        fechaDeCreacion = localDate.ToString()
+                };
 
                     try
                     {
@@ -140,7 +148,7 @@ public class SCR_AdminAccess : MonoBehaviour {
 
         //if Login was a success, open options
         if (loginSuccessful)
-            OpenOptionsMenu();
+            OpenPopUp();
 
     }
 
@@ -158,37 +166,61 @@ public class SCR_AdminAccess : MonoBehaviour {
         return passwordHash;
     }
 
+    IEnumerator WaitToTurnOffNewUserPopUp()
+    {
+        yield return new WaitForSeconds(1.5f);
+        popupSuccess.SetActive(true);
+        OpenOptionsMenu();
+    }
+
     //**** UI FUNCTIONS ****\\
     #region UI_FUNCTIONS
+
+    public void ShowLogin()
+    {
+        activeUser = "";
+        loginPanel.SetActive(true);
+        txtErrorLogin.text = "";
+
+        login_Password.text = "";
+        login_User.text = "";
+    }
     public void OpenCreateUser()
     {
+        loginPanel.SetActive(false);
         optionsMenu.SetActive(false);
         panelVideoUpload.SetActive(false);
         panelGameUpload.SetActive(false);
         panelModelUpload.SetActive(false);
+        popupSuccess.SetActive(false);
         panelNewUser.SetActive(true);
-    }
 
+        newUser_Password.text = "";
+        newUser_User.text = "";
+        txtErrorNewUser.text = "";
+        newUser_ConfirmPassword.text = "";
+    }
     public void OpenUploadVideo()
     {
+        loginPanel.SetActive(false);
         optionsMenu.SetActive(false);
         panelVideoUpload.SetActive(true);
         panelGameUpload.SetActive(false);
         panelModelUpload.SetActive(false);
         panelNewUser.SetActive(false);
     }
-
     public void OpenUploadGame()
     {
+        loginPanel.SetActive(false);
         optionsMenu.SetActive(false);
         panelVideoUpload.SetActive(false);
         panelGameUpload.SetActive(true);
         panelModelUpload.SetActive(false);
         panelNewUser.SetActive(false);
     }
-
     public void OpenUploadModel()
     {
+        loginPanel.SetActive(false);
         optionsMenu.SetActive(false);
         panelVideoUpload.SetActive(false);
         panelGameUpload.SetActive(false);
@@ -197,11 +229,18 @@ public class SCR_AdminAccess : MonoBehaviour {
     }
     public void OpenOptionsMenu()
     {
+        loginPanel.SetActive(false);
         optionsMenu.SetActive(true);
         panelVideoUpload.SetActive(false);
         panelGameUpload.SetActive(false);
         panelModelUpload.SetActive(false);
         panelNewUser.SetActive(false);
+        txtBienvenido.text = "Bienvenid@, " + activeUser;
+    }
+    public void OpenPopUp()
+    {
+        popupSuccess.SetActive(true);
+        StartCoroutine(WaitToTurnOffNewUserPopUp());
     }
 
     public void SelectNext(InputField inptfld)

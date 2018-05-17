@@ -8,4 +8,6 @@ public class JSONUser {
     public int id;
     public string username;
     public string password; // this is SHA-256
+    public string createdBy;
+    public string fechaDeCreacion;
 }

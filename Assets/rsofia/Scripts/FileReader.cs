@@ -37,7 +37,7 @@ namespace GameArcade
                 Directory.CreateDirectory(_path);
 
            TextWriter textWriter = new StreamWriter(_path + _filaName, _append);
-            textWriter.Write(_text);
+            textWriter.WriteLine(_text);
             textWriter.Close();
         }
 

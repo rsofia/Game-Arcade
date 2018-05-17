@@ -27,6 +27,7 @@ public class SCR_FileManager : MonoBehaviour {
     
     private string pathImg;
     private string uploadName = "";
+    private string pathBanner;
 
 
     #region UPLOAD FILES
@@ -166,6 +167,8 @@ public class SCR_FileManager : MonoBehaviour {
         //File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
         File.Copy(pathImg, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathImg));
 
+        File.Copy(pathImg, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathBanner));
+
     }
     /*************************************************************************/
 
@@ -186,10 +189,17 @@ public class SCR_FileManager : MonoBehaviour {
     }
     /*************************************************************************/
 
-    public void OnUploadImageClicked()
+    public void OnUploadImageClicked(bool isbanner = false)
     {
         var extensions = new[] { new ExtensionFilter("Image File", "img", "png") };
-        pathImg = GameObject.Find("TXTMSH_Thumbnail").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Game Thumbnail", "", "", false)[0];
+        if(!isbanner)
+        {
+            pathImg = GameObject.Find("TXTMSH_Thumbnail").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Thumbnail", "", "", false)[0];
+        }
+        else
+        {
+            pathBanner = GameObject.Find("TXTMSH_Banner").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Banner", "", "", false)[0];
+        }
         Debug.Log(pathImg);
     }
 
