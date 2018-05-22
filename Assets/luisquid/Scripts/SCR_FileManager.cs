@@ -28,6 +28,7 @@ public class SCR_FileManager : MonoBehaviour {
     private string pathImg;
     private string uploadName = "";
     private string pathBanner;
+    private string title = "";
 
 
     #region UPLOAD FILES
@@ -124,7 +125,7 @@ public class SCR_FileManager : MonoBehaviour {
             sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text,
             category = GameObject.Find("DD_Categoria").GetComponent<Dropdown>().value
         };
-
+        title = videoDetails.title;
         //get selected toggles
         int counter = 0;
         C_FilmGenre[] genres = FindObjectsOfType<C_FilmGenre>();
@@ -161,13 +162,26 @@ public class SCR_FileManager : MonoBehaviour {
 
     public void OnUploadVideoFilesClicked()
     {
-        Directory.CreateDirectory(persistentDataPath + "/Video/" + uploadName);
-        File.Copy(pathVideo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathVideo));
-        MakeVideoInfo(persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
+        title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text;
+        string nombreArchivo = title + "_" + uploadName;
+        Directory.CreateDirectory(persistentDataPath + "/Video/" + nombreArchivo);
+        File.Copy(pathVideo, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + Path.GetExtension(pathVideo));
+        MakeVideoInfo(persistentDataPath + "/Video/" + nombreArchivo + "/" + title + ".txt");
         //File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
-        File.Copy(pathImg, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathImg));
+        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + "_Thumbnail" + Path.GetExtension(pathImg));
 
-        File.Copy(pathImg, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + Path.GetExtension(pathBanner));
+        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + "_Banner" + Path.GetExtension(pathBanner));
+
+        Debug.Log("Video uploaded succesfully!");
+
+        if(GameObject.FindObjectOfType<SCR_AdminAccess>() != null)
+        {
+            FindObjectOfType<SCR_AdminAccess>().OpenOptionsMenu();
+        }
+        else
+        {
+            Debug.Log("No esta en la escena indicada");
+        }
 
     }
     /*************************************************************************/

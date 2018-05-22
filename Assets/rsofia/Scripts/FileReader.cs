@@ -42,9 +42,9 @@ namespace GameArcade
         }
 
         //Returns JPGs inside folder or if none found, PNGs
-        public static Texture2D GetImageInsideFolder(string _path)
+        public static Texture2D[] GetImageInsideFolder(string _path)
         {
-            Texture2D img = new Texture2D(2, 2);
+            Texture2D[] img = new Texture2D[] { new Texture2D(2, 2), new Texture2D(2,2)};
             string[] result = System.IO.Directory.GetFiles(_path, "*.jpg");
             if(result.Length == 0)
             {
@@ -56,7 +56,15 @@ namespace GameArcade
                 if (File.Exists(result[0]))
                 {
                     byte[] fileData = File.ReadAllBytes(result[0]);
-                    img.LoadImage(fileData);
+                    img[0].LoadImage(fileData);
+                }
+                if(result.Length >= 2)
+                {
+                    if (File.Exists(result[1]))
+                    {
+                        byte[] fileData = File.ReadAllBytes(result[1]);
+                        img[1].LoadImage(fileData);
+                    }
                 }
             }
             return img;

@@ -30,9 +30,13 @@ namespace GameArcade.Subclasses
             isYoutubeVideo = _isYoutubeVideo;
 
             //Leer png de un archivo png o jpg dentro de una carpeta
-            Texture2D _icon = FileReader.GetImageInsideFolder(filmPath);
-            if (_icon != null)
-                AssignImage(_icon);
+            Texture2D[] _icon = FileReader.GetImageInsideFolder(filmPath);
+            if (_icon != null && _icon.Length >= 1)
+            {
+                AssignImage(_icon[0]);
+                if(_icon.Length >= 2)
+                AssignBanner(_icon[1]);
+            }
 
             //Leer informacion de un archivo de texto
             string[] lines = FileReader.ReadAllLinesFromTxtAtPath(filmPath);
@@ -53,12 +57,13 @@ namespace GameArcade.Subclasses
             txtNombre.text = nombre;
         }
 
-        public virtual void Init(Sprite _icon, string _name, string _filmPath, string _videoInfo)
+        public virtual void Init(Sprite _icon, Sprite _banner, string _name, string _filmPath, string _videoInfo)
         {
             nombre = _name;
             filmPath = _filmPath;
             txtNombre.text = nombre;
             icono.sprite = _icon;
+
             videoInfo = _videoInfo;
         }
 
