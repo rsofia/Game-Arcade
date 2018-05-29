@@ -93,12 +93,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icono: {fileID: 114608545025809324}
+  banner: {fileID: 0}
   txtNombre: {fileID: 114372050662257902}
   nombre: 
   filmPath: 
   videoInfo: 
   isYoutubeVideo: 0
   director: 
+  generos: 
+  categoria: 0
 --- !u!114 &114608545025809324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,7 +211,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 65, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224308364126192856
 RectTransform:

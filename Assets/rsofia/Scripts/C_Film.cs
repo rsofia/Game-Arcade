@@ -23,6 +23,7 @@ namespace GameArcade.Subclasses
         [HideInInspector]
         public int categoria;
 
+
         public void Init(string _name,  string _filePath,  bool _isYoutubeVideo = false)
         {
             nombre = _name;
@@ -30,13 +31,17 @@ namespace GameArcade.Subclasses
             isYoutubeVideo = _isYoutubeVideo;
 
             //Leer png de un archivo png o jpg dentro de una carpeta
-            Texture2D[] _icon = FileReader.GetImageInsideFolder(filmPath);
-            if (_icon != null && _icon.Length >= 1)
-            {
-                AssignImage(_icon[0]);
-                if(_icon.Length >= 2)
-                AssignBanner(_icon[1]);
-            }
+            //Texture2D[] _icon = FileReader.GetImageInsideFolder(filmPath);
+            //if (_icon != null && _icon.Length >= 1)
+            //{
+            //    AssignImage(_icon[0]);
+            //    if(_icon.Length >= 2)
+            //    AssignBanner(_icon[1]);
+            //}
+            if(icono != null)
+            AssignImage(FileReader.GetTextureWithName("Thumbnail", filmPath));
+
+            AssignBanner(FileReader.GetTextureWithName("Banner", filmPath));
 
             //Leer informacion de un archivo de texto
             string[] lines = FileReader.ReadAllLinesFromTxtAtPath(filmPath);
@@ -53,9 +58,23 @@ namespace GameArcade.Subclasses
             else
                 Debug.Log("Lines was null");
 
+            if(txtNombre != null)
+            txtNombre.text = nombre;
+        }
+
+        public void Init(C_Film _film)
+        {
+            nombre = _film.nombre;
+            filmPath = _film.filmPath;
+            isYoutubeVideo = _film.isYoutubeVideo;
+
+            AssignImage(FileReader.GetTextureWithName("Thumbnail", filmPath));
+            AssignBanner(FileReader.GetTextureWithName("Banner", filmPath));
+            videoInfo = _film.videoInfo;
 
             txtNombre.text = nombre;
         }
+
 
         public virtual void Init(Sprite _icon, Sprite _banner, string _name, string _filmPath, string _videoInfo)
         {
@@ -63,7 +82,7 @@ namespace GameArcade.Subclasses
             filmPath = _filmPath;
             txtNombre.text = nombre;
             icono.sprite = _icon;
-
+            banner = _banner;
             videoInfo = _videoInfo;
         }
 

@@ -40,6 +40,8 @@ namespace GameArcade
 
         [Header("Menu Films")]
         public static string filmPath;
+        public GameObject scrollCategoriaPrefab;
+        public GameObject txtTitlePrefab;
         public GameObject filmBtnPrefab;
         public Transform parentMenuFilm;
         public C_VideoInfo videoInfo;
@@ -48,8 +50,9 @@ namespace GameArcade
         public VideoManager videoManager;
 
         private List<string> folders = new List<string>();
+        private Dictionary<int, GameObject> genres = new Dictionary<int, GameObject>();
         private Dictionary<int, C_Game> allGames = new Dictionary<int, C_Game>();
-        private Dictionary<int, C_Game> allFilms = new Dictionary<int, C_Game>();
+        private Dictionary<string, C_Film> allFilms = new Dictionary<string, C_Film>();
 
 
         private SCR_FileManager scrFileManager;
@@ -126,21 +129,47 @@ namespace GameArcade
             folders = FileReader.ReadAllFoldersAtPath(filmPath);
 
             //Delete any buttons that might exist
-            for (int i = parentMenuFilm.childCount -1; i >= 0; i--)
+            for (int i = parentMenuFilm.childCount - 1; i >= 0; i--)
             {
                 Destroy(parentMenuFilm.GetChild(i).gameObject);
             }
 
+            //Get all the genres inside
+            genres.Clear();
+            allFilms.Clear();
             foreach (string fileName in folders)
             {
-                //Instanciar objeto de video junto con su info
-                GameObject btn = Instantiate(filmBtnPrefab, parentMenuFilm);
-                btn.GetComponent<C_Film>().Init(fileName, filmPath);
-                btn.GetComponent<Button>().onClick.AddListener(() => GoToVideoInfo(btn.GetComponent<C_Film>()));
+                C_Film film = new C_Film();
+                film.Init(fileName, filmPath);
+                allFilms.Add(film.nombre, film);
+                if(!genres.ContainsKey(film.categoria))
+                {
+                    //Title
+                    GameObject txtTitle = Instantiate(txtTitlePrefab, parentMenuFilm);
+                    txtTitle.GetComponent<Text>().text = ((VideoCategories)film.categoria).ToString();
+                    //Scroll Category (horizontal)
+                    GameObject scrollCat = GameObject.Instantiate(scrollCategoriaPrefab, parentMenuFilm);
+                    scrollCat.name = ((VideoCategories)film.categoria).ToString();
+                    genres.Add(film.categoria, scrollCat);
+                }
             }
 
-            float parentHeight = (folders.Count % 5) == 0 ? (folders.Count / 5)  * 170 : ((folders.Count / 5)+1) * 170;
-            parentMenuFilm.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentHeight);
+            foreach(KeyValuePair <string, C_Film > pair in allFilms)
+            {
+                foreach(KeyValuePair < int, GameObject > cat in genres)
+                {
+                    if (pair.Value.categoria == cat.Key)
+                    {
+                        GameObject btn = Instantiate(filmBtnPrefab, cat.Value.transform.Find("Viewport").Find("Content"));
+                        btn.GetComponent<C_Film>().Init(pair.Value);
+                        btn.GetComponent<Button>().onClick.AddListener(() => GoToVideoInfo(btn.GetComponent<C_Film>()));
+                        break;
+                    }
+                }               
+            }
+
+            //float parentHeight = (folders.Count % 5) == 0 ? (folders.Count / 5)  * 170 : ((folders.Count / 5)+1) * 170;
+            //parentMenuFilm.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentHeight);
 
             folders.Clear();
         }

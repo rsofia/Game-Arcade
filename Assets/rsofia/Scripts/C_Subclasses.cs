@@ -14,6 +14,10 @@ namespace GameArcade.Subclasses
         
         protected void AssignImage(Texture2D img)
         {
+            if (img == null)
+                Debug.Log("img was null");
+            if (icono == null)
+                Debug.Log("icono was null");
             icono.sprite = Sprite.Create(img, new Rect(0, 0, img.width, img.height), Vector3.zero);
         }
 

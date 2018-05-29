@@ -125,7 +125,6 @@ public class SCR_FileManager : MonoBehaviour {
             sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text,
             category = GameObject.Find("DD_Categoria").GetComponent<Dropdown>().value
         };
-        title = videoDetails.title;
         //get selected toggles
         int counter = 0;
         C_FilmGenre[] genres = FindObjectsOfType<C_FilmGenre>();
@@ -163,14 +162,15 @@ public class SCR_FileManager : MonoBehaviour {
     public void OnUploadVideoFilesClicked()
     {
         title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text;
+        title = title.Replace(" ", "_");
         string nombreArchivo = title + "_" + uploadName;
         Directory.CreateDirectory(persistentDataPath + "/Video/" + nombreArchivo);
         File.Copy(pathVideo, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + Path.GetExtension(pathVideo));
         MakeVideoInfo(persistentDataPath + "/Video/" + nombreArchivo + "/" + title + ".txt");
         //File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
-        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + "_Thumbnail" + Path.GetExtension(pathImg));
+        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/Thumbnail" + Path.GetExtension(pathImg));
 
-        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/" + title + "_Banner" + Path.GetExtension(pathBanner));
+        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/Banner" + Path.GetExtension(pathBanner));
 
         Debug.Log("Video uploaded succesfully!");
 
