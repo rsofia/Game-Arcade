@@ -90,10 +90,15 @@ namespace GameArcade.Subclasses
 
         public void OnSelect(BaseEventData eventData)
         {
+            CallOnSelect();
+           // Debug.Log(gameObject.name + " was selected");
+        }
+
+        public void CallOnSelect()
+        {
             if (menuManager == null)
                 menuManager = FindObjectOfType<MenuManager>();
             menuManager.FillInfoWith(GetComponent<C_Film>());
-           // Debug.Log(gameObject.name + " was selected");
         }
 
     }

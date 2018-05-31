@@ -299,11 +299,18 @@ MonoBehaviour:
   gameBtnPrefab: {fileID: 1690454732723394, guid: 889e60dceb08bc14bab49cc28369f940,
     type: 2}
   parentMenuGame: {fileID: 51980106}
+  scrollCategoriaPrefab: {fileID: 0}
+  txtTitlePrefab: {fileID: 0}
   filmBtnPrefab: {fileID: 1491203113929844, guid: 0524a46d15b733544811d6e0facfd83e,
     type: 2}
   parentMenuFilm: {fileID: 601907074}
   videoInfo: {fileID: 733546525}
   videoManager: {fileID: 625833058}
+  generoFilm:
+  - "Acci\xF3n"
+  - 'Aventura '
+  - Comedia
+  - Terror
 --- !u!4 &27021469
 Transform:
   m_ObjectHideFlags: 0
@@ -3359,12 +3366,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icono: {fileID: 196773380}
+  banner: {fileID: 0}
   txtNombre: {fileID: 2054198749}
   nombre: 
   filmPath: 
   videoInfo: 
   isYoutubeVideo: 0
   director: 
+  generos: 
+  categoria: 0
   txtInfo: {fileID: 13394380}
   btnPlay: {fileID: 759282770}
 --- !u!224 &759282769 stripped
@@ -3704,7 +3714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &812865383
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4282,12 +4292,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icono: {fileID: 1028868634}
+  banner: {fileID: 0}
   txtNombre: {fileID: 760648776}
   nombre: 
   filmPath: 
   videoInfo: 
   isYoutubeVideo: 0
   director: 
+  generos: 
+  categoria: 0
+  btnPlayVideo: {fileID: 0}
 --- !u!1 &1049734511
 GameObject:
   m_ObjectHideFlags: 0

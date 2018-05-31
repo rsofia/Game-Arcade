@@ -146,7 +146,7 @@ namespace GameArcade
                 {
                     //Title
                     GameObject txtTitle = Instantiate(txtTitlePrefab, parentMenuFilm);
-                    txtTitle.GetComponent<Text>().text = ((VideoCategories)film.categoria).ToString();
+                    txtTitle.GetComponent<Text>().text = (((VideoCategories)film.categoria).ToString()).Replace("_", " ");
                     //Scroll Category (horizontal)
                     GameObject scrollCat = GameObject.Instantiate(scrollCategoriaPrefab, parentMenuFilm);
                     scrollCat.name = ((VideoCategories)film.categoria).ToString();
@@ -168,8 +168,12 @@ namespace GameArcade
                 }               
             }
 
-            //float parentHeight = (folders.Count % 5) == 0 ? (folders.Count / 5)  * 170 : ((folders.Count / 5)+1) * 170;
-            //parentMenuFilm.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentHeight);
+            //After the initialization, find the first one to select it and display on banner
+            //Its the second child of the parentMenuFilm because the first one is a text
+            if(parentMenuFilm.transform.childCount >= 2)
+            {
+                parentMenuFilm.transform.GetChild(1).Find("Viewport").GetChild(0).GetChild(0).GetComponent<C_Film>().CallOnSelect();
+            }
 
             folders.Clear();
         }
