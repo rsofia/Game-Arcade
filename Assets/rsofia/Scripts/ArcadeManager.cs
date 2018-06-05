@@ -29,6 +29,33 @@ namespace GameArcade
         BEHIND_THE_SCENES
     }
 
+    public enum GameGenre
+    {
+        ACCION,
+        AVENTURA,
+        SHOOTER, 
+        ESTRATEGIA,
+        PUZZLE,
+        HORROR,
+        PLATFORMER,
+        STEALTH,
+        OTRO
+    }
+
+    public enum GameDimesion
+    {
+        _2D,
+        _25D,
+        _3D
+    }
+
+    public enum GameCamera
+    {
+        FIRST_PERSON,
+        THIRD_PERSON,
+        SIDE_SCROLLER
+    }
+
     public class ArcadeManager : ParentOfAll
     {
         public MenuManager menuManager;

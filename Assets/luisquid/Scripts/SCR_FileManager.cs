@@ -71,12 +71,86 @@ public class SCR_FileManager : MonoBehaviour {
         Debug.Log(pathDataFolder);
     }
 
+    private void MakeGameInfo(string path)
+    {
+        JSONGameInfo gameInfo = new JSONGameInfo()
+        {
+            title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text,
+            sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text
+        };
+
+        foreach(C_GameCamera cam in FindObjectsOfType<C_GameCamera>())
+        {
+            if (cam.GetComponent<Toggle>().isOn)
+            {
+                gameInfo.camera = (int)cam.camType;
+                break;
+            }
+        }
+
+        foreach (C_GameDimension dim in FindObjectsOfType<C_GameDimension>())
+        {
+            if (dim.GetComponent<Toggle>().isOn)
+            {
+                gameInfo.dimension = (int)dim.dim;
+                break;
+            }
+        }
+
+        //get selected toggles
+        int counter = 0;
+        C_GameGenre[] genres = FindObjectsOfType<C_GameGenre>();
+        foreach (C_GameGenre genre in genres)
+        {
+            if (genre.GetComponent<Toggle>().isOn)
+            {
+                counter++;
+            }
+        }
+
+        //Establich size of array
+        gameInfo.genres = new int[counter];
+
+        foreach (C_GameGenre genre in genres)
+        {
+            if (genre.GetComponent<Toggle>().isOn)
+            {
+                if (counter - 1 >= 0)
+                    gameInfo.genres[counter - 1] = (int)genre.genre;
+                else
+                    break;
+                counter--;
+            }
+        }
+
+        //Aqui en un futuro encriptar
+
+        TextWriter textWriter = new StreamWriter(path, false);
+        textWriter.WriteLine(JsonUtility.ToJson(gameInfo));
+        textWriter.Close();
+
+    }
+
     public void OnUploadGameFilesClicked()
     {
-        Directory.CreateDirectory(persistentDataPath + "/Games/" + uploadName);
-        File.Copy(pathExe, persistentDataPath + "/Games/" + uploadName + "/" + uploadName + ".exe");
-        File.Copy(pathImg, persistentDataPath + "/Games/" + uploadName + "/" + uploadName + Path.GetExtension(pathImg));
-        CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + uploadName + "/" + uploadName + "_Data/");
+        title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text;
+        title = title.Replace(" ", "_");
+        string nombreArchivo = title + "_" + uploadName;
+
+        Directory.CreateDirectory(persistentDataPath + "/Games/" + nombreArchivo);
+        File.Copy(pathExe, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".exe");
+        File.Copy(pathImg, persistentDataPath + "/Games/" + nombreArchivo + "/Thumbnail"+ Path.GetExtension(pathImg));
+        MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".txt");
+        CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + "_Data/");
+
+        if (GameObject.FindObjectOfType<SCR_AdminAccess>() != null)
+        {
+            FindObjectOfType<SCR_AdminAccess>().OpenOptionsMenu();
+        }
+        else
+        {
+            Debug.Log("No esta en la escena indicada");
+        }
     }
     /*************************************************************************/
 
