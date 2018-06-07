@@ -30,6 +30,28 @@ public class SCR_FileManager : MonoBehaviour {
     private string pathBanner;
     private string title = "";
 
+    public GameObject loader;
+
+    [Header("Game UI")]
+    public TextMeshProUGUI txtGamePath;
+    public TextMeshProUGUI txtGameDataPath;
+    public TextMeshProUGUI txtGameThumbnail;
+    public InputField inptfldGameTitle;
+    public InputField inptfldGameSinopsis;
+    public Transform gameGenreWrap;
+    public Transform gameDimensionWrap;
+    public Transform gameCameraWrap;
+
+    [Header("Video UI")]
+    public InputField inptfldVideoTitle;
+    public InputField inptfldVideoDirector;
+    public InputField inptfldVideoSinopsis;
+    public Dropdown ddVideoCategoria;
+    public TextMeshProUGUI txtVideoPath;
+    public TextMeshProUGUI txtVideoThumbnail;
+    public TextMeshProUGUI txtVideoBanner;
+    public Transform genreWrap;
+
 
     #region UPLOAD FILES
     /***************************** GAME FILES ********************************/
@@ -39,7 +61,7 @@ public class SCR_FileManager : MonoBehaviour {
                 new ExtensionFilter("Executable File", "exe"),
             };
 
-        pathExe = GameObject.Find("TXTMSH_Exe").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Exe", "", extensions, false)[0];
+        pathExe = txtGamePath.GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Exe", "", extensions, false)[0];
 
         uploadName = Path.GetFileNameWithoutExtension(pathExe);
 
@@ -57,7 +79,7 @@ public class SCR_FileManager : MonoBehaviour {
             return;
         }
 
-        pathDataFolder = GameObject.Find("TXTMSH_DataFolder").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFolderPanel("Upload Data Folder", "", false)[0];
+        pathDataFolder = txtGameDataPath.GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFolderPanel("Upload Data Folder", "", false)[0];
 
         if (pathDataFolder.Contains(uploadName))
         {
@@ -75,8 +97,8 @@ public class SCR_FileManager : MonoBehaviour {
     {
         JSONGameInfo gameInfo = new JSONGameInfo()
         {
-            title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text,
-            sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text
+            title = inptfldGameTitle.text,
+            sinopsis = inptfldGameSinopsis.GetComponent<InputField>().text
         };
 
         foreach(C_GameCamera cam in FindObjectsOfType<C_GameCamera>())
@@ -133,7 +155,8 @@ public class SCR_FileManager : MonoBehaviour {
 
     public void OnUploadGameFilesClicked()
     {
-        title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text;
+        loader.SetActive(true);
+        title = inptfldGameTitle.text;
         title = title.Replace(" ", "_");
         string nombreArchivo = title + "_" + uploadName;
 
@@ -143,8 +166,21 @@ public class SCR_FileManager : MonoBehaviour {
         MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".txt");
         CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + "_Data/");
 
+        txtGamePath.text = "Selecciona el ejecutable del juego";
+        txtGameDataPath.text = "Selecciona la carpeta Data del juego";
+        txtGameThumbnail.text = "Selecciona el icono de tu proyecto";
+        inptfldGameSinopsis.text = "";
+        inptfldGameTitle.text = "";
+        foreach (Toggle t in gameGenreWrap.GetComponentsInChildren<Toggle>())
+        {
+            t.isOn = false;
+        }
+        gameDimensionWrap.GetComponentInChildren<Toggle>().isOn = true;
+        gameCameraWrap.GetComponentInChildren<Toggle>().isOn = true;
+
         if (GameObject.FindObjectOfType<SCR_AdminAccess>() != null)
         {
+            loader.SetActive(false);
             FindObjectOfType<SCR_AdminAccess>().OpenOptionsMenu();
         }
         else
@@ -161,7 +197,7 @@ public class SCR_FileManager : MonoBehaviour {
                 new ExtensionFilter("Video File", "mp4", "asf", "mov", "mpg", "mpeg", "ogv", "uvp8", "wmv"),
             };
 
-        pathVideo = GameObject.Find("TXTMSH_Exe").GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload Video File", "", extensions, false)[0];
+        pathVideo = txtVideoPath.text = StandaloneFileBrowser.OpenFilePanel("Upload Video File", "", extensions, false)[0];
 
         uploadName = Path.GetFileNameWithoutExtension(pathVideo);
 
@@ -193,11 +229,11 @@ public class SCR_FileManager : MonoBehaviour {
         JSONVideoDetails videoDetails = new JSONVideoDetails()
         {
             //find input field with movie title
-            director = GameObject.Find("INPTFLD_Director").GetComponent<InputField>().text,
+            director = inptfldVideoDirector.text,
             //find input field with directors name
-            title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text,
-            sinopsis = GameObject.Find("INPTFLD_Sinopsis").GetComponent<InputField>().text,
-            category = GameObject.Find("DD_Categoria").GetComponent<Dropdown>().value
+            title = inptfldVideoTitle.text,
+            sinopsis = inptfldVideoSinopsis.text,
+            category = ddVideoCategoria.value
         };
         //get selected toggles
         int counter = 0;
@@ -235,7 +271,8 @@ public class SCR_FileManager : MonoBehaviour {
 
     public void OnUploadVideoFilesClicked()
     {
-        title = GameObject.Find("INPTFLD_Title").GetComponent<InputField>().text;
+        loader.SetActive(true);
+        title = inptfldVideoTitle.text;
         title = title.Replace(" ", "_");
         string nombreArchivo = title + "_" + uploadName;
         Directory.CreateDirectory(persistentDataPath + "/Video/" + nombreArchivo);
@@ -244,12 +281,28 @@ public class SCR_FileManager : MonoBehaviour {
         //File.Copy(pathVideoInfo, persistentDataPath + "/Video/" + uploadName + "/" + uploadName + ".txt");
         File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/Thumbnail" + Path.GetExtension(pathImg));
 
-        File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/Banner" + Path.GetExtension(pathBanner));
+        File.Copy(pathBanner, persistentDataPath + "/Video/" + nombreArchivo + "/Banner" + Path.GetExtension(pathBanner));
 
         Debug.Log("Video uploaded succesfully!");
 
-        if(GameObject.FindObjectOfType<SCR_AdminAccess>() != null)
+        //Reset Paths
+        inptfldVideoTitle.text = "";
+        inptfldVideoDirector.text = "";
+        inptfldVideoSinopsis.text = "";
+        ddVideoCategoria.value = 0;
+        txtVideoPath.GetComponent<TextMeshProUGUI>().text = "Selecciona el vídeo a subir";
+        txtVideoThumbnail.text = "Selecciona el icono de tu proyecto";
+        txtVideoBanner.text = "Selecciona el banner de tu proyecto";
+        foreach(Toggle t in genreWrap.GetComponentsInChildren<Toggle>())
         {
+            t.isOn = false;
+        }
+
+
+
+        if (GameObject.FindObjectOfType<SCR_AdminAccess>() != null)
+        {
+            loader.SetActive(false);
             FindObjectOfType<SCR_AdminAccess>().OpenOptionsMenu();
         }
         else

@@ -18,6 +18,16 @@ namespace GameArcade
             OpenMainMenu();
         }
 
+        private void Update()
+        {
+            //Recibir Inputs
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                OpenMainMenu();
+            }
+
+        }
+
         //Turns off all the sumenus
         private void CloseSubMenus()
         {
