@@ -41,6 +41,11 @@ public class SCR_FileManager : MonoBehaviour {
     public Transform gameGenreWrap;
     public Transform gameDimensionWrap;
     public Transform gameCameraWrap;
+    public TextMeshProUGUI txtGameDLL;
+    private bool doesGameUseDLL = false;
+    public GameObject dllPanel;
+    public GameObject dllYesNo;
+    public GameObject dllAdd;
 
     [Header("Video UI")]
     public InputField inptfldVideoTitle;
@@ -51,8 +56,7 @@ public class SCR_FileManager : MonoBehaviour {
     public TextMeshProUGUI txtVideoThumbnail;
     public TextMeshProUGUI txtVideoBanner;
     public Transform genreWrap;
-
-
+    
     #region UPLOAD FILES
     /***************************** GAME FILES ********************************/
     public void OnUploadExeClicked()
@@ -153,6 +157,20 @@ public class SCR_FileManager : MonoBehaviour {
 
     }
 
+
+    public void OpenDLLWindow()
+    {
+        dllPanel.SetActive(true);
+        dllYesNo.SetActive(true);
+    }
+
+    public void OnYesDLL()
+    {
+        dllYesNo.SetActive(false);
+        dllAdd.SetActive(true);
+        doesGameUseDLL = true;
+    }
+
     public void OnUploadGameFilesClicked()
     {
         loader.SetActive(true);
@@ -166,11 +184,18 @@ public class SCR_FileManager : MonoBehaviour {
         MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".txt");
         CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + "_Data/");
 
+        if(doesGameUseDLL)
+        {
+            File.Copy(txtGameDLL.text, persistentDataPath + "/Games/" + nombreArchivo + "/UnityEngine.dll");
+        }
+
         txtGamePath.text = "Selecciona el ejecutable del juego";
         txtGameDataPath.text = "Selecciona la carpeta Data del juego";
         txtGameThumbnail.text = "Selecciona el icono de tu proyecto";
         inptfldGameSinopsis.text = "";
         inptfldGameTitle.text = "";
+        txtGameDLL.text = "Selecciona el DLL del juego";
+        doesGameUseDLL = false;
         foreach (Toggle t in gameGenreWrap.GetComponentsInChildren<Toggle>())
         {
             t.isOn = false;
@@ -269,6 +294,7 @@ public class SCR_FileManager : MonoBehaviour {
 
     }
 
+    
     public void OnUploadVideoFilesClicked()
     {
         loader.SetActive(true);
@@ -282,7 +308,7 @@ public class SCR_FileManager : MonoBehaviour {
         File.Copy(pathImg, persistentDataPath + "/Video/" + nombreArchivo + "/Thumbnail" + Path.GetExtension(pathImg));
 
         File.Copy(pathBanner, persistentDataPath + "/Video/" + nombreArchivo + "/Banner" + Path.GetExtension(pathBanner));
-
+        
         Debug.Log("Video uploaded succesfully!");
 
         //Reset Paths
@@ -406,5 +432,8 @@ public class SCR_FileManager : MonoBehaviour {
             Directory.CreateDirectory(persistentDataPath + "/Games/");
         }
 
+        dllPanel.SetActive(false);
+        dllYesNo.SetActive(false);
+        dllAdd.SetActive(false);
     }
 }

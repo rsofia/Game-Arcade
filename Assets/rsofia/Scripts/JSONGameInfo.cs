@@ -11,4 +11,5 @@ public class JSONGameInfo
     public int dimension;
     public int camera;
     public int[] genres;
+    public bool hasDLL;
 }

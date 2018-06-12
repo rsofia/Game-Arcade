@@ -77,14 +77,16 @@ namespace GameArcade
         public VideoManager videoManager;
 
         private List<string> folders = new List<string>();
-        private Dictionary<int, GameObject> genres = new Dictionary<int, GameObject>();
+        private Dictionary<int, GameObject> filmGenres = new Dictionary<int, GameObject>();
         private Dictionary<int, C_Game> allGames = new Dictionary<int, C_Game>();
         private Dictionary<string, C_Film> allFilms = new Dictionary<string, C_Film>();
+        private Dictionary<int, GameObject> gameGenres = new Dictionary<int, GameObject>();
 
 
         private SCR_FileManager scrFileManager;
 
-        public string[] generoFilm = { "Acción", "Aventura ", "Comedia", "Terror" };
+        //public string[] generoFilm = { "Acción", "Aventura ", "Comedia", "Terror" };
+      
             
 
         void Start()
@@ -107,48 +109,104 @@ namespace GameArcade
             //Esto de aqui ya lo habia hecho en una clase llamada FileReader. La funcion es
             // ReadAllFoldersAtPath y recibe como argumento el path y regresa una lista de
             // todos los folders dentro - Sofia
-            Debug.Log(SCR_FileManager.persistentDataPath + "/Games/");
-            if(Directory.Exists(SCR_FileManager.persistentDataPath + "/Games/"))
-            {
-                string [] tempDirectories = scrFileManager.GetAllFoldersFromPath(SCR_FileManager.persistentDataPath + "/Games/");
+            //Debug.Log(SCR_FileManager.persistentDataPath + "/Games/");
+            //if(Directory.Exists(SCR_FileManager.persistentDataPath + "/Games/"))
+            //{
+            //    string [] tempDirectories = scrFileManager.GetAllFoldersFromPath(SCR_FileManager.persistentDataPath + "/Games/");
 
-                for(int i = 0; i < tempDirectories.Length; i++)
-                {
-                    Debug.Log(tempDirectories[i]);
-                }
-            }
+            //    for(int i = 0; i < tempDirectories.Length; i++)
+            //    {
+            //        Debug.Log(tempDirectories[i]);
+            //    }
+            //}
 
-            else
-            {
-                Debug.Log("I do not exist");
-                Directory.CreateDirectory(SCR_FileManager.persistentDataPath + "/Games/");
-            }
+            //else
+            //{
+            //    Debug.Log("I do not exist");
+            //    Directory.CreateDirectory(SCR_FileManager.persistentDataPath + "/Games/");
+            //}
 
+            //gameExesPath = SCR_FileManager.persistentDataPath + "/Games/";
             //folders = FileReader.ReadAllFoldersAtPath(gameExesPath);
 
             ////Delete any that might exist
-            //for(int i = parentMenuGame.childCount-1; i >= 0; i--)
+            //for (int i = parentMenuGame.childCount - 1; i >= 0; i--)
             //{
             //    Destroy(parentMenuGame.GetChild(i).gameObject);
             //}
 
-            //foreach (string folderName in folders)
+            ////Get all the genres inside
+            //gameGenres.Clear();
+            //allGames.Clear();
+            //foreach (string fileName in folders)
             //{
-            //    string[] exeName = FileReader.GetExeInsideFolder(gameExesPath + folderName);
-            //    if (exeName.Length == 1)
+            //    C_Game game = new C_Game();
+            //    game.Init()
+            //    allGames.Add(game.nombre, game);
+            //    if (!gameGenres.ContainsKey(game.categoria))
             //    {
-            //        GameObject btn = Instantiate(gameBtnPrefab, parentMenuGame);
-            //        Texture2D img = FileReader.GetImageInsideFolder(gameExesPath + folderName);
-            //        btn.GetComponent<C_Game>().Init(folderName, img, exeName[0]);
-            //        btn.GetComponent<Button>().onClick.AddListener(() => OpenGame(exeName[0]));
-            //    }
-            //    else
-            //    {
-            //        //No button will be created if the file has errors
-            //        Debug.Log("You either have no exes or too many exes inside folder at path " + folderName);
+            //        //Title
+            //        GameObject txtTitle = Instantiate(txtTitlePrefab, parentMenuGame);
+            //        txtTitle.GetComponent<Text>().text = (((VideoCategories)game.categoria).ToString()).Replace("_", " ");
+            //        //Scroll Category (horizontal)
+            //        GameObject scrollCat = GameObject.Instantiate(scrollCategoriaPrefab, parentMenuFilm);
+            //        scrollCat.name = ((VideoCategories)game.categoria).ToString();
+            //        gameGenres.Add(game.categoria, scrollCat);
             //    }
             //}
+
+            //foreach (KeyValuePair<string, C_Game> pair in allGames)
+            //{
+            //    foreach (KeyValuePair<int, GameObject> cat in gameGenres)
+            //    {
+            //        if (pair.Value.categoria == cat.Key)
+            //        {
+            //            GameObject btn = Instantiate(filmBtnPrefab, cat.Value.transform.Find("Viewport").Find("Content"));
+            //            btn.GetComponent<C_Game>().Init(folderName, img[0], exeName[0]);
+            //            btn.GetComponent<Button>().onClick.AddListener(() => OpenGame(exeName[0]));
+            //            break;
+            //        }
+            //    }
+            //}
+
+            //After the initialization, find the first one to select it and display on banner
+            //Its the second child of the parentMenuFilm because the first one is a text
+            //if (parentMenuGame.transform.childCount >= 2)
+            //{
+            //    parentMenuGame.transform.GetChild(1).Find("Viewport").GetChild(0).GetChild(0).GetComponent<C_Game>().CallOnSelect();
+            //}
+
             //folders.Clear();
+
+            folders = FileReader.ReadAllFoldersAtPath(gameExesPath);
+
+            //Delete any that might exist
+            for (int i = parentMenuGame.childCount - 1; i >= 0; i--)
+            {
+                Destroy(parentMenuGame.GetChild(i).gameObject);
+            }
+
+            foreach (string folderName in folders)
+            {
+                string[] exeName = FileReader.GetExeInsideFolder(gameExesPath + folderName);
+                if (exeName.Length == 1)
+                {
+                    GameObject btn = Instantiate(gameBtnPrefab, parentMenuGame);
+                    Texture2D[] img = FileReader.GetImageInsideFolder(gameExesPath + folderName);
+                    if (img != null && img.Length >= 1)
+                    {
+                        btn.GetComponent<C_Game>().Init(folderName.Replace("_", " "), img[0], exeName[0]);
+                        btn.GetComponent<Button>().onClick.AddListener(() => OpenGame(exeName[0]));
+                    }
+
+                }
+                else
+                {
+                    //No button will be created if the file has errors
+                    Debug.Log("You either have no exes or too many exes inside folder at path " + folderName);
+                }
+            }
+            folders.Clear();
         }
 
         public void LoadAllVideos()
@@ -162,14 +220,14 @@ namespace GameArcade
             }
 
             //Get all the genres inside
-            genres.Clear();
+            filmGenres.Clear();
             allFilms.Clear();
             foreach (string fileName in folders)
             {
                 C_Film film = new C_Film();
                 film.Init(fileName, filmPath);
                 allFilms.Add(film.nombre, film);
-                if(!genres.ContainsKey(film.categoria))
+                if(!filmGenres.ContainsKey(film.categoria))
                 {
                     //Title
                     GameObject txtTitle = Instantiate(txtTitlePrefab, parentMenuFilm);
@@ -177,13 +235,13 @@ namespace GameArcade
                     //Scroll Category (horizontal)
                     GameObject scrollCat = GameObject.Instantiate(scrollCategoriaPrefab, parentMenuFilm);
                     scrollCat.name = ((VideoCategories)film.categoria).ToString();
-                    genres.Add(film.categoria, scrollCat);
+                    filmGenres.Add(film.categoria, scrollCat);
                 }
             }
 
             foreach(KeyValuePair <string, C_Film > pair in allFilms)
             {
-                foreach(KeyValuePair < int, GameObject > cat in genres)
+                foreach(KeyValuePair < int, GameObject > cat in filmGenres)
                 {
                     if (pair.Value.categoria == cat.Key)
                     {
