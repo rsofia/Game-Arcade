@@ -2347,7 +2347,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 241372063}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 533631131}
+        m_MethodName: OnUploadDLLClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &241372063
@@ -5407,6 +5418,21 @@ Prefab:
       propertyPath: txtGameDLL
       value: 
       objectReference: {fileID: 825953384}
+    - target: {fileID: 114514352167027488, guid: 4d762e40f083e6b45893a483f138a4d1,
+        type: 2}
+      propertyPath: dllPanel
+      value: 
+      objectReference: {fileID: 918154700}
+    - target: {fileID: 114514352167027488, guid: 4d762e40f083e6b45893a483f138a4d1,
+        type: 2}
+      propertyPath: dllYesNo
+      value: 
+      objectReference: {fileID: 1884560739}
+    - target: {fileID: 114514352167027488, guid: 4d762e40f083e6b45893a483f138a4d1,
+        type: 2}
+      propertyPath: dllAdd
+      value: 
+      objectReference: {fileID: 509049269}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d762e40f083e6b45893a483f138a4d1, type: 2}
   m_IsPrefabParent: 0
@@ -5433,7 +5459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &561995712
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5992,7 +6018,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 533631131}
-        m_MethodName: OnUploadGameFilesClicked
+        m_MethodName: OpenDLLWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19512,7 +19538,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2037260627}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 533631131}
+        m_MethodName: OnYesDLL
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2037260627

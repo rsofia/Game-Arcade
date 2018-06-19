@@ -17,6 +17,7 @@ public class SCR_FileManager : MonoBehaviour {
     //Game Files
     private string pathExe;
     private string pathDataFolder;
+    private string pathDLL;
 
     //Video Files
     private string pathVideo;
@@ -29,6 +30,7 @@ public class SCR_FileManager : MonoBehaviour {
     private string uploadName = "";
     private string pathBanner;
     private string title = "";
+    private string uploadDLLName = "";
 
     public GameObject loader;
 
@@ -70,6 +72,22 @@ public class SCR_FileManager : MonoBehaviour {
         uploadName = Path.GetFileNameWithoutExtension(pathExe);
 
         if (Directory.Exists(persistentDataPath + "/Games/" + uploadName))
+        {
+            Debug.Log("YA EXISTE SALIR SALIR");
+        }
+    }
+
+    public void OnUploadDLLClicked()
+    {
+        var extensions = new[] {
+                new ExtensionFilter("dll"),
+            };
+
+        pathDLL = txtGamePath.GetComponent<TextMeshProUGUI>().text = StandaloneFileBrowser.OpenFilePanel("Upload DLL", "", extensions, false)[0];
+        txtGameDLL.text = pathDLL;
+        uploadDLLName = Path.GetFileNameWithoutExtension(pathDLL);
+
+        if (Directory.Exists(persistentDataPath + "/Games/" + uploadDLLName))
         {
             Debug.Log("YA EXISTE SALIR SALIR");
         }
@@ -180,13 +198,14 @@ public class SCR_FileManager : MonoBehaviour {
 
         Directory.CreateDirectory(persistentDataPath + "/Games/" + nombreArchivo);
         File.Copy(pathExe, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".exe");
+            if(pathImg != null)
         File.Copy(pathImg, persistentDataPath + "/Games/" + nombreArchivo + "/Thumbnail"+ Path.GetExtension(pathImg));
         MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".txt");
         CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + "_Data/");
 
         if(doesGameUseDLL)
         {
-            File.Copy(txtGameDLL.text, persistentDataPath + "/Games/" + nombreArchivo + "/UnityEngine.dll");
+            File.Copy(pathDLL, persistentDataPath + "/Games/" + nombreArchivo + "/UnityEngine.dll");
         }
 
         txtGamePath.text = "Selecciona el ejecutable del juego";
@@ -432,8 +451,12 @@ public class SCR_FileManager : MonoBehaviour {
             Directory.CreateDirectory(persistentDataPath + "/Games/");
         }
 
-        dllPanel.SetActive(false);
-        dllYesNo.SetActive(false);
-        dllAdd.SetActive(false);
+        if (dllPanel != null)
+        {
+            dllPanel.SetActive(false);
+            dllYesNo.SetActive(false);
+            dllAdd.SetActive(false);
+        }
+        
     }
 }
