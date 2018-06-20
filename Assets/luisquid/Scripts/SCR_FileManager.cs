@@ -7,6 +7,8 @@ using TMPro;
 
 using UnityEngine.UI;
 using SFB;
+using System;
+using System.IO.Compression;
 
 public class SCR_FileManager : MonoBehaviour {
 
@@ -197,15 +199,19 @@ public class SCR_FileManager : MonoBehaviour {
         string nombreArchivo = title + "_" + uploadName;
 
         Directory.CreateDirectory(persistentDataPath + "/Games/" + nombreArchivo);
-        File.Copy(pathExe, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".exe");
+        File.Copy(pathExe, persistentDataPath + "/Games/" + nombreArchivo + "/" + uploadName + ".exe");
             if(pathImg != null)
         File.Copy(pathImg, persistentDataPath + "/Games/" + nombreArchivo + "/Thumbnail"+ Path.GetExtension(pathImg));
-        MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + ".txt");
-        CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + nombreArchivo + "_Data/");
+        MakeGameInfo(persistentDataPath + "/Games/" + nombreArchivo + "/" + uploadName + ".txt");
+        CopyAllFromDirectory(pathDataFolder, persistentDataPath + "/Games/" + nombreArchivo + "/" + uploadName + "_Data/");
 
         if(doesGameUseDLL)
         {
-            File.Copy(pathDLL, persistentDataPath + "/Games/" + nombreArchivo + "/UnityEngine.dll");
+            File.Copy(pathDLL, persistentDataPath + "/Games/" + nombreArchivo + "/UnityPlayer.dll");
+            //byte[] dllBytes = File.ReadAllBytes(pathDLL);
+            //File.WriteAllBytes(persistentDataPath + "/Games/" + nombreArchivo + "/UnityEngine.dll", dllBytes);
+            
+
         }
 
         txtGamePath.text = "Selecciona el ejecutable del juego";
