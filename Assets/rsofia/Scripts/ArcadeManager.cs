@@ -73,6 +73,11 @@ namespace GameArcade
         public Transform parentMenuFilm;
         public C_VideoInfo videoInfo;
 
+        [Header("Menu Models")]
+        public static string modelsPath;
+        public GameObject modelBtnPrefab;
+        public Transform parentMenuModels;
+
         [Header("Video Player")]
         public VideoManager videoManager;
 
@@ -81,6 +86,8 @@ namespace GameArcade
         private Dictionary<int, C_Game> allGames = new Dictionary<int, C_Game>();
         private Dictionary<string, C_Film> allFilms = new Dictionary<string, C_Film>();
         private Dictionary<int, GameObject> gameGenres = new Dictionary<int, GameObject>();
+        private Dictionary<string, C_Model> allModels = new Dictionary<string, C_Model>();
+
 
 
         private SCR_FileManager scrFileManager;
@@ -100,6 +107,7 @@ namespace GameArcade
             //Check for games and videos only at start of app
             LoadAllGames();
             LoadAllVideos();
+            LoadAllModels();
         }
 
 #region LOAD
@@ -175,16 +183,8 @@ namespace GameArcade
             //{
             //    parentMenuGame.transform.GetChild(1).Find("Viewport").GetChild(0).GetChild(0).GetComponent<C_Game>().CallOnSelect();
             //}
-
-            //folders.Clear();
-
-            folders = FileReader.ReadAllFoldersAtPath(gameExesPath);
-
-            //Delete any that might exist
-            for (int i = parentMenuGame.childCount - 1; i >= 0; i--)
-            {
-                Destroy(parentMenuGame.GetChild(i).gameObject);
-            }
+            
+            ReadFoldersAtPathAndClearParent(parentMenuGame, gameExesPath);
 
             foreach (string folderName in folders)
             {
@@ -211,13 +211,7 @@ namespace GameArcade
 
         public void LoadAllVideos()
         {
-            folders = FileReader.ReadAllFoldersAtPath(filmPath);
-
-            //Delete any buttons that might exist
-            for (int i = parentMenuFilm.childCount - 1; i >= 0; i--)
-            {
-                Destroy(parentMenuFilm.GetChild(i).gameObject);
-            }
+            ReadFoldersAtPathAndClearParent(parentMenuFilm, filmPath);
 
             //Get all the genres inside
             filmGenres.Clear();
@@ -261,6 +255,32 @@ namespace GameArcade
             }
 
             folders.Clear();
+        }
+
+        public void LoadAllModels()
+        {
+            ReadFoldersAtPathAndClearParent(parentMenuModels, modelsPath);
+
+            foreach (string folderName in folders)
+            {
+                GameObject btn = Instantiate(modelBtnPrefab, parentMenuModels);
+                btn.GetComponent<C_Model>().Init(folderName);
+                allModels.Add(btn.GetComponent<C_Model>().nombre, btn.GetComponent<C_Model>());
+                //btn.GetComponent<Button>().onClick.AddListener(() => GoToModelInfo(btn.GetComponent<C_Model>()));
+            }
+            folders.Clear();
+        }
+
+        private void ReadFoldersAtPathAndClearParent(Transform _toClear, string _path)
+        {
+            folders.Clear();
+            folders = FileReader.ReadAllFoldersAtPath(_path);
+
+            //Delete any buttons that might exist
+            for (int i = _toClear.childCount - 1; i >= 0; i--)
+            {
+                Destroy(_toClear.GetChild(i).gameObject);
+            }
         }
 #endregion
 

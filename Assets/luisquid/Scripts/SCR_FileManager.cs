@@ -60,6 +60,12 @@ public class SCR_FileManager : MonoBehaviour {
     public TextMeshProUGUI txtVideoThumbnail;
     public TextMeshProUGUI txtVideoBanner;
     public Transform genreWrap;
+
+    [Header("Model UI")]
+    public TextMeshProUGUI txtModelPath;
+    public InputField inptfldModelCreador;
+    public InputField inptfldModelName;
+
     
     #region UPLOAD FILES
     /***************************** GAME FILES ********************************/
@@ -254,6 +260,7 @@ public class SCR_FileManager : MonoBehaviour {
         if (Directory.Exists(persistentDataPath + "/Videos/" + uploadName))
         {
             Debug.Log("YA EXISTE SALIR SALIR");
+            uploadName = UnityEngine.Random.Range(1, 100).ToString();
         }
     }
 
@@ -367,16 +374,41 @@ public class SCR_FileManager : MonoBehaviour {
     /***************************** MODEL FILES *******************************/
     public void OnUploadModelClicked()
     {
-
-    }
-
-    public void OnUploadModelInfoClicked()
-    {
+        var extensions = new[] { new ExtensionFilter("fbx, obj"), };
+        pathModel = txtModelPath.text = StandaloneFileBrowser.OpenFilePanel("Upload Model", "", extensions, false)[0];
 
     }
 
     public void OnUploadModelFilesClicked()
     {
+        JSONModelInfo modelInfo = new JSONModelInfo
+        {
+            nombre = inptfldModelName.text,
+            nombreModelador = inptfldModelCreador.text,
+        };
+
+        loader.SetActive(true);
+        string nombreArchivo = modelInfo.nombre.Replace(" ", "_"); 
+        Directory.CreateDirectory(persistentDataPath + "/Models/" + nombreArchivo);
+        File.Copy(pathModel, persistentDataPath + "/Models/" + nombreArchivo + "/Modelo" + Path.GetExtension(pathModel));
+        File.Copy(pathImg, persistentDataPath + "/Models/" + nombreArchivo + "/Thumbnail" + Path.GetExtension(pathImg));
+        TextWriter textWriter = new StreamWriter(persistentDataPath + "/Models/" + nombreArchivo + "/Info.txt", false);
+        textWriter.WriteLine(JsonUtility.ToJson(modelInfo));
+        textWriter.Close();
+
+        inptfldModelName.text = "";
+        inptfldModelCreador.text = "";
+        txtModelPath.text = "";
+
+        if (FindObjectOfType<SCR_AdminAccess>() != null)
+        {
+            loader.SetActive(false);
+            FindObjectOfType<SCR_AdminAccess>().OpenOptionsMenu();
+        }
+        else
+        {
+            Debug.Log("No esta en la escena indicada");
+        }
 
     }
     /*************************************************************************/

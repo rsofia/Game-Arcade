@@ -6,5 +6,4 @@ public class JSONModelInfo {
 
     public string nombre;
     public string nombreModelador;
-    public int year;
 }
