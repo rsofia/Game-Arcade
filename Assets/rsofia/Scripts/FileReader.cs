@@ -74,17 +74,17 @@ namespace GameArcade
         {
             Texture2D img = new Texture2D(2, 2);
             //string[] result = System.IO.Directory.GetFiles(_path+_name, "*.jpg");
-            UnityEngine.Debug.Log("TEXTURE" + _path + "/" + _name);
+            //UnityEngine.Debug.Log("TEXTURE" + _path + "/" + _name);
 
             if (File.Exists(_path + "/"+ _name +".jpg"))
             {
-                UnityEngine.Debug.Log("JPG");
+                //UnityEngine.Debug.Log("JPG");
                 byte[] fileData = File.ReadAllBytes(_path + "/" + _name + ".jpg");
                 img.LoadImage(fileData);
             }
             else if(File.Exists(_path + "/" + _name + ".png"))
             {
-                UnityEngine.Debug.Log("PNG");
+                //UnityEngine.Debug.Log("PNG");
                 byte[] fileData = File.ReadAllBytes(_path + "/" + _name + ".png");
                 img.LoadImage(fileData);
             }

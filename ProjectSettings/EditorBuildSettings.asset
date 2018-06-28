@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/rsofia/Scenes/Demo_Upload.unity
     guid: 2ec25f781857c3146b9e1d8596c28202
+  - enabled: 1
+    path: Assets/rsofia/Scenes/ModelViewer.unity
+    guid: 511d69df0dd54ad4c94f2f2149e8de3c

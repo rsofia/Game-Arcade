@@ -59,7 +59,7 @@ namespace GameArcade
     public class ArcadeManager : ParentOfAll
     {
         public MenuManager menuManager;
-
+        public SceneTransition sceneTransition;
         [Header("Menu Games")]
         public static string gameExesPath;
         public GameObject gameBtnPrefab;
@@ -98,11 +98,14 @@ namespace GameArcade
 
         void Start()
         {
+            if (sceneTransition == null)
+                sceneTransition = FindObjectOfType<SceneTransition>();
             scrFileManager = FindObjectOfType<SCR_FileManager>();
             if (string.IsNullOrEmpty(SCR_FileManager.persistentDataPath))
                 SCR_FileManager.persistentDataPath = Application.persistentDataPath;
             gameExesPath = SCR_FileManager.persistentDataPath + "/Games/";
             filmPath = SCR_FileManager.persistentDataPath + "/Video/";
+            modelsPath = SCR_FileManager.persistentDataPath + "/Models/";
 
             //Check for games and videos only at start of app
             LoadAllGames();
@@ -259,14 +262,15 @@ namespace GameArcade
 
         public void LoadAllModels()
         {
+            Debug.Log("Voy a cargar a " + modelsPath);
             ReadFoldersAtPathAndClearParent(parentMenuModels, modelsPath);
 
             foreach (string folderName in folders)
             {
                 GameObject btn = Instantiate(modelBtnPrefab, parentMenuModels);
-                btn.GetComponent<C_Model>().Init(folderName);
+                btn.GetComponent<C_Model>().Init(modelsPath + folderName);
                 allModels.Add(btn.GetComponent<C_Model>().nombre, btn.GetComponent<C_Model>());
-                //btn.GetComponent<Button>().onClick.AddListener(() => GoToModelInfo(btn.GetComponent<C_Model>()));
+                btn.GetComponent<Button>().onClick.AddListener(() => GoToModelInfo(btn.GetComponent<C_Model>()));
             }
             folders.Clear();
         }
@@ -294,6 +298,11 @@ namespace GameArcade
         {
             videoInfo.Init(film);
             menuManager.OpenSubmenu(2);
+        }
+
+        public void GoToModelInfo(C_Model model)
+        {
+            sceneTransition.GoToViewModel();
         }
 
         public void PlayVideo(string _url)

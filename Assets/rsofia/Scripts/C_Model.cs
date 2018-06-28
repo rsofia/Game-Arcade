@@ -22,8 +22,20 @@ namespace GameArcade.Subclasses
 
         public void Init(string _modelPath)
         {
+            Debug.Log("Model Path: " + _modelPath);
+            modelPath = _modelPath;
             //aqui abrir el archivo y leer la info de el
-            //FileReader.
+            string[] lines = FileReader.ReadAllLinesFromTxtAtPath(modelPath);
+            if(lines != null && lines.Length >= 1)
+            {
+                JSONModelInfo modelInfo = JsonUtility.FromJson<JSONModelInfo>(lines[0]);
+                nombre = modelInfo.nombre;
+                nombreModelador = modelInfo.nombreModelador;
+            }
+            txtNombre.text = nombre;
+            Texture2D myTexture = FileReader.GetTextureWithName("Thumbnail", modelPath);
+            if (myTexture != null)
+                AssignImage(myTexture);
         }
 
     }
