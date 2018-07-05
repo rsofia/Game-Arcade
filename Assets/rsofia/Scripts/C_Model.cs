@@ -9,6 +9,8 @@ namespace GameArcade.Subclasses
         public string nombre;
         public string modelPath;
         public string nombreModelador;
+        [HideInInspector]
+        public string modelFullPath = "/Modelo.fbx";
 
         public void Init( string _modelPath, string _name, Texture2D _icon, string _nombreModelador)
         {
@@ -24,10 +26,12 @@ namespace GameArcade.Subclasses
         {
             Debug.Log("Model Path: " + _modelPath);
             modelPath = _modelPath;
+            modelFullPath = modelPath + modelFullPath;
             //aqui abrir el archivo y leer la info de el
             string[] lines = FileReader.ReadAllLinesFromTxtAtPath(modelPath);
             if(lines != null && lines.Length >= 1)
             {
+                Debug.Log("Linea de modelo: " + lines[0]);
                 JSONModelInfo modelInfo = JsonUtility.FromJson<JSONModelInfo>(lines[0]);
                 nombre = modelInfo.nombre;
                 nombreModelador = modelInfo.nombreModelador;

@@ -302,7 +302,7 @@ namespace GameArcade
 
         public void GoToModelInfo(C_Model model)
         {
-            sceneTransition.GoToViewModel();
+            sceneTransition.GoToViewModel(model);
         }
 
         public void PlayVideo(string _url)

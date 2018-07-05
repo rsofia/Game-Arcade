@@ -19,8 +19,9 @@ public class SceneTransition : MonoBehaviour {
         SceneManager.LoadScene(uploadScene);
     }
 
-    public void GoToViewModel()
+    public void GoToViewModel(GameArcade.Subclasses.C_Model model)
     {
+        SCR_ViewModel.fbxPath = model.modelFullPath;
         SceneManager.LoadScene(modelViewerScene);
     }
     

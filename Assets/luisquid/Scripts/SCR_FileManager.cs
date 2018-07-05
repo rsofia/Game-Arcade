@@ -374,7 +374,7 @@ public class SCR_FileManager : MonoBehaviour {
     /***************************** MODEL FILES *******************************/
     public void OnUploadModelClicked()
     {
-        var extensions = new[] { new ExtensionFilter("fbx, obj"), };
+        var extensions = new[] { new ExtensionFilter("fbx"), };
         pathModel = txtModelPath.text = StandaloneFileBrowser.OpenFilePanel("Upload Model", "", extensions, false)[0];
 
     }
